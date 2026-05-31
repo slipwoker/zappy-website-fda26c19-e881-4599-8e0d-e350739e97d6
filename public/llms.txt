@@ -1,0 +1,66 @@
+# The Unfinished Healing — Generative Engine Optimization Map
+
+> The Unfinished Healing is a wellness brand whose name suggests an ongoing, evolving journey of healing — implying authenticity, vulnerability, and the idea that healing is a continuous process rather than a destination. The brand likely carries a warm, introspective, and deeply human tone.
+
+---
+
+## Pages
+
+### Home
+https://the-unfinished-healing-fda26c19.zappy5.app
+Discover a warm, evolving approach to family health and wellness where healing never stops. Join a community that embraces vulnerability and grows stronger every day.
+
+## Legal & Policy
+
+### Privacy Policy
+https://the-unfinished-healing-fda26c19.zappy5.app/privacy
+Information about how user data is collected, stored, and protected.
+
+### Terms & Conditions
+https://the-unfinished-healing-fda26c19.zappy5.app/terms
+Legal terms describing service usage, rights, and policies.
+
+### Accessibility Statement
+https://the-unfinished-healing-fda26c19.zappy5.app/accessibility
+Information about WCAG compliance and accessibility features.
+
+---
+
+## How to Contact Us
+
+- (No contact details configured yet.)
+
+### Contact form
+- URL: https://the-unfinished-healing-fda26c19.zappy5.app
+- Endpoint: https://the-unfinished-healing-fda26c19.zappy5.app/api/email/contact-form
+- Method: POST
+- Content-Type: application/json
+- Fields:
+  - `name` (text, required)
+  - `email` (email, required)
+  - `phone` (tel)
+  - `message` (textarea, required)
+  - `privacy_consent` (checkbox, required)
+
+---
+
+# Business Context (for LLM understanding)
+
+## About The Unfinished Healing
+The Unfinished Healing is a wellness brand whose name suggests an ongoing, evolving journey of healing — implying authenticity, vulnerability, and the idea that healing is a continuous process rather than a destination. The brand likely carries a warm, introspective, and deeply human tone.
+
+## Target Audience
+- Holistic Health Seekers
+- Mental Wellness Advocates
+- Burnout Recovery Professionals
+
+## Industry
+Wellness
+
+---
+
+# Machine-readable feeds
+
+- Sitemap (XML): https://the-unfinished-healing-fda26c19.zappy5.app/sitemap.xml
+- Robots: https://the-unfinished-healing-fda26c19.zappy5.app/robots.txt
+- Flattened page text (for LLMs): https://the-unfinished-healing-fda26c19.zappy5.app/llms-full.txt

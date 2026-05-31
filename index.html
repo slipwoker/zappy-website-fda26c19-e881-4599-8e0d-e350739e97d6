@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>Begin Your Ongoing Journey — The Unfinished Healing</title>
+    <meta name="description" content="Discover a warm, evolving approach to family health and wellness where healing never stops. Join a community that embraces vulnerability and grows stronger every day.">
+    <meta name="keywords" content="family health and wellness, holistic wellness center, mental health wellness, valley wellness center, continuous healing journey">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Zappy Analytics -->
+<script>
+(function() {
+  'use strict';
+  
+  // Configuration
+  var config = {
+    websiteId: 'fda26c19-e881-4599-8e0d-e350739e97d6',
+    apiUrl: 'https://api.zappy5.com/api/analytics/track',
+    sessionDuration: 30 * 60 * 1000, // 30 minutes
+    visitorDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
+    trackPageViews: true,
+    trackClicks: true,
+    trackFormSubmissions: true
+  };
+  
+  // Generate or retrieve persistent visitor ID (30 days)
+  function getVisitorId() {
+    var visitorKey = 'zappy_visitor_' + config.websiteId;
+    var visitor = null;
+    
+    try {
+      visitor = localStorage.getItem(visitorKey);
+      if (visitor) {
+        var visitorData = JSON.parse(visitor);
+        var now = Date.now();
+        
+        // Check if visitor ID is still valid (30 days)
+        if (now - visitorData.created < config.visitorDuration) {
+          // Update last seen timestamp
+          visitorData.lastSeen = now;
+          localStorage.setItem(visitorKey, JSON.stringify(visitorData));
+          return visitorData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: LocalStorage not available');
+    }
+    
+    // Generate new visitor ID
+    var newVisitorId = 'zv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      localStorage.setItem(visitorKey, JSON.stringify({
+        id: newVisitorId,
+        created: Date.now(),
+        lastSeen: Date.now()
+      }));
+    } catch (e) {
+      // Continue without local storage
+    }
+    
+    return newVisitorId;
+  }
+  
+  // Generate or retrieve session ID (30 minutes)
+  function getSessionId() {
+    var sessionKey = 'zappy_session_' + config.websiteId;
+    var session = null;
+    
+    try {
+      session = sessionStorage.getItem(sessionKey);
+      if (session) {
+        var sessionData = JSON.parse(session);
+        var now = Date.now();
+        
+        // Check if session is still valid
+        if (now - sessionData.timestamp < config.sessionDuration) {
+          // Update timestamp
+          sessionData.timestamp = now;
+          sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+          return sessionData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: SessionStorage not available');
+    }
+    
+    // Generate new session ID
+    var newSessionId = 'zs_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      sessionStorage.setItem(sessionKey, JSON.stringify({
+        id: newSessionId,
+        timestamp: Date.now()
+      }));
+    } catch (e) {
+      // Continue without session storage
+    }
+    
+    return newSessionId;
+  }
+  
+  var visitorId = getVisitorId();
+  var sessionId = getSessionId();
+  
+  // Track an event
+  function trackEvent(eventType, data) {
+    data = data || {};
+    
+    var eventData = {
+      website_id: config.websiteId,
+      event_type: eventType,
+      page_path: window.location.pathname,
+      referrer: document.referrer || 'direct',
+      visitor_id: visitorId,
+      session_id: sessionId,
+      metadata: data
+    };
+    
+    // Use sendBeacon if available (better for page unload events)
+    if (navigator.sendBeacon) {
+      var blob = new Blob([JSON.stringify(eventData)], { type: 'application/json' });
+      navigator.sendBeacon(config.apiUrl, blob);
+    } else {
+      // Fallback to fetch
+      fetch(config.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(eventData),
+        keepalive: true
+      }).catch(function(error) {
+        console.warn('Zappy Analytics: Failed to track event', error);
+      });
+    }
+  }
+  
+  // Track page view
+  if (config.trackPageViews) {
+    trackEvent('pageview', {
+      title: document.title,
+      url: window.location.href
+    });
+  }
+  
+  // Track clicks on important elements
+  if (config.trackClicks) {
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      
+      // Track button clicks (counted as actions)
+      if (target.tagName === 'BUTTON' || target.closest('button')) {
+        var button = target.tagName === 'BUTTON' ? target : target.closest('button');
+        trackEvent('click', {
+          element: 'button',
+          text: button.textContent.trim().substring(0, 100),
+          id: button.id || null,
+          class: button.className || null
+        });
+      }
+      
+      // Track link clicks (navigation - not counted as actions)
+      else if (target.tagName === 'A' || target.closest('a')) {
+        var link = target.tagName === 'A' ? target : target.closest('a');
+        trackEvent('navigation', {
+          element: 'link',
+          text: link.textContent.trim().substring(0, 100),
+          href: link.href,
+          external: link.hostname !== window.location.hostname
+        });
+      }
+    }, true);
+  }
+  
+  // Track form submissions
+  if (config.trackFormSubmissions) {
+    document.addEventListener('submit', function(e) {
+      var form = e.target;
+      
+      trackEvent('form_submit', {
+        form_id: form.id || null,
+        form_name: form.name || null,
+        form_action: form.action || null,
+        form_method: form.method || 'GET'
+      });
+    }, true);
+  }
+  
+  // Track time on page (send on page unload)
+  var pageLoadTime = Date.now();
+  
+  window.addEventListener('beforeunload', function() {
+    var timeOnPage = Math.floor((Date.now() - pageLoadTime) / 1000); // in seconds
+    
+    trackEvent('page_unload', {
+      time_on_page: timeOnPage,
+      page_path: window.location.pathname
+    });
+  });
+  
+  // Expose tracking function globally for custom events
+  window.zappyAnalytics = {
+    track: trackEvent,
+    getVisitorId: function() { return visitorId; },
+    getSessionId: function() { return sessionId; }
+  };
+  
+})();
+</script>
+<!-- End Zappy Analytics -->
+    <meta property="og:title" content="Begin Your Ongoing Journey — The Unfinished Healing">
+    <meta property="og:description" content="Discover a warm, evolving approach to family health and wellness where healing never stops. Join a community that embraces vulnerability and grows stronger every day.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Begin Your Ongoing Journey — The Unfinished Healing">
+    <meta name="twitter:description" content="Discover a warm, evolving approach to family health and wellness where healing never stops. Join a community that embraces vulnerability and grows stronger every day.">
+    <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .skip-link { position: absolute; top: 0; left: 0; transform: translateY(-200%); padding: 12px 18px; background: var(--bg-dark, #1a1a1a); color: var(--text-light, #fff); font-weight: 600; border-radius: 0 0 8px 0; z-index: 10000; }
+    .skip-link:focus { transform: none; outline: 2px solid var(--ring, #fff); outline-offset: 2px; }
+    :focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 3px; }
+  </style>
+
+
+  
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Cookie Consent -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css">
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    <!-- Mickidum Accessibility Toolbar -->
+    <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
+    <link rel="stylesheet" href="/styles.css">
+    <script>window.ZAPPY_WEBSITE_ID = "fda26c19-e881-4599-8e0d-e350739e97d6"; window.ZAPPY_API_BASE = "https://api.zappy5.com";</script>
+
+    <style id="zappy-dropdown-submenu-styles">
+      /* ========== DESKTOP DROPDOWN SUBMENU STYLES ========== */
+      /* Base styles for dropdown submenus - parent must be positioned */
+      .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { position: relative; }
+      /* Submenu base - hidden by default */
+      .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { display: block !important; position: absolute !important; top: 100%; left: 0; min-width: 220px; background: white; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); padding: 8px 0; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; z-index: 1000; list-style: none; pointer-events: none; }
+      /* CRITICAL: Desktop hover styles to show dropdown */
+      .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Submenu item styling */
+      .sub-menu li { list-style: none; margin: 0; padding: 0; }
+      .sub-menu a { display: block !important; padding: 10px 16px !important; color: var(--text-dark, #333) !important; font-weight: 500; text-decoration: none; white-space: nowrap; transition: background-color 0.2s; }
+      .sub-menu .zappy-nav-child > a { padding-left: 28px !important; font-size: 0.9em !important; opacity: 0.85 !important; }
+      [dir="rtl"] .sub-menu .zappy-nav-child > a, html[lang="he"] .sub-menu .zappy-nav-child > a, html[lang="ar"] .sub-menu .zappy-nav-child > a { padding-left: 10px !important; padding-right: 28px !important; }
+      .sub-menu .zappy-nav-parent > a { font-weight: 600 !important; }
+      .sub-menu a:hover { background-color: #f5f5f5; }
+      /* RTL (Hebrew/Arabic) dropdown positioning */
+      [dir="rtl"] .nav-menu .sub-menu, [dir="rtl"] nav .sub-menu, [dir="rtl"] .navbar .sub-menu, html[lang="he"] .nav-menu .sub-menu, html[lang="he"] nav .sub-menu, html[lang="he"] .navbar .sub-menu, html[lang="ar"] .nav-menu .sub-menu, html[lang="ar"] nav .sub-menu, html[lang="ar"] .navbar .sub-menu { left: auto !important; right: 0 !important; }
+      /* Hide empty dropdown menus (exclude catalog sub-menus that use <a> children instead of <li>) */
+      .sub-menu:empty, .sub-menu:not(:has(li:not(.zappy-hidden-menu-item))):not(:has(> a)), .sub-menu:not(:has(li)):not(:has(> a)) { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+      /* Desktop: show submenu on Menu Group hover */
+      li:has(.menu-group-title):hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Menu Group title styling */
+      .nav-menu > li > .menu-group-title, #navMenu > li > .menu-group-title { display: inline-block; padding: 0.5rem 1rem; cursor: default; user-select: none; }
+      
+      /* ========== MOBILE SUBMENU STYLES ========== */
+      @media (max-width: 768px) {
+        .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { position: static !important; transform: none !important; box-shadow: none !important; background: transparent !important; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; padding: 0 !important; border-radius: 0 !important; }
+        .navbar .sub-menu.mobile-expanded, .nav-menu .sub-menu.mobile-expanded, #navMenu .sub-menu.mobile-expanded { max-height: none !important; overflow-y: visible !important; opacity: 1 !important; visibility: visible !important; padding: 8px 0 8px 16px !important; }
+        [dir="rtl"] .sub-menu.mobile-expanded, html[lang="he"] .sub-menu.mobile-expanded { padding: 8px 16px 8px 0 !important; }
+        /* Disable hover behavior on mobile */
+        .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 0; visibility: hidden; pointer-events: none; }
+        .nav-menu li > .sub-menu.mobile-expanded, nav li > .sub-menu.mobile-expanded, .navbar li > .sub-menu.mobile-expanded, #navMenu li > .sub-menu.mobile-expanded { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
+        .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { display: flex !important; flex-wrap: wrap !important; align-items: center !important; position: relative !important; min-height: 44px !important; }
+        .nav-menu li:has(.sub-menu) > a, nav li:has(.sub-menu) > a, .navbar li:has(.sub-menu) > a, #navMenu li:has(.sub-menu) > a { flex: 1 !important; min-width: 0 !important; }
+        .nav-menu li:has(.sub-menu) > .menu-group-title, nav li:has(.sub-menu) > .menu-group-title, .navbar li:has(.sub-menu) > .menu-group-title, #navMenu li:has(.sub-menu) > .menu-group-title { flex: 1 !important; min-width: 0 !important; padding: 0 !important; line-height: inherit !important; }
+        .nav-menu li:has(.sub-menu) > .sub-menu, nav li:has(.sub-menu) > .sub-menu, .navbar li:has(.sub-menu) > .sub-menu, #navMenu li:has(.sub-menu) > .sub-menu { flex-basis: 100% !important; width: 100% !important; }
+        .nav-menu li:has(.sub-menu) > a [class*="chevron"], .nav-menu li:has(.sub-menu) > a [class*="arrow"], .nav-menu li:has(.sub-menu) > a .fa-chevron-down, .nav-menu li:has(.sub-menu) > a .fa-angle-down, nav li:has(.sub-menu) > a [class*="chevron"], nav li:has(.sub-menu) > a [class*="arrow"], #navMenu li:has(.sub-menu) > a [class*="chevron"], #navMenu li:has(.sub-menu) > a [class*="arrow"] { display: none !important; visibility: hidden !important; }
+        .mobile-submenu-toggle { display: flex !important; align-items: center !important; justify-content: center !important; width: 44px !important; height: auto !important; background: transparent !important; border: none !important; cursor: pointer !important; color: var(--text-light) !important; position: static !important; flex-shrink: 0 !important; align-self: stretch !important; z-index: 2 !important; padding: 0 !important; margin: 0 !important; }
+        .mobile-submenu-toggle::after { content: '' !important; width: 0 !important; height: 0 !important; border-left: 6px solid transparent !important; border-right: 6px solid transparent !important; border-top: 7px solid currentColor !important; transition: transform 0.3s ease !important; }
+        .mobile-submenu-toggle.expanded::after { transform: rotate(180deg) !important; }
+        .sub-menu a { padding: 10px 0 !important; display: block !important; color: var(--text-light) !important; white-space: normal !important; }
+        .sub-menu .zappy-nav-child > a { padding-left: 28px !important; font-size: 0.9em !important; opacity: 0.85 !important; }
+        [dir="rtl"] .sub-menu .zappy-nav-child > a, html[lang="he"] .sub-menu .zappy-nav-child > a, html[lang="ar"] .sub-menu .zappy-nav-child > a { padding-left: 0 !important; padding-right: 28px !important; }
+        .sub-menu .zappy-nav-parent > a { font-weight: 600 !important; }
+        .nav-menu.active, #navMenu.active { max-width: 100vw !important; overflow-x: hidden !important; box-sizing: border-box !important; }
+        .navbar .sub-menu li a, nav.navbar .sub-menu li a, .zappy-products-dropdown .sub-menu a { color: var(--text-light) !important; }
+      }
+      @media (min-width: 769px) { .mobile-submenu-toggle { display: none !important; } }
+    </style>
+
+    <style id="zappy-widget-visibility">
+      html[dir="rtl"] .whatsapp-float { right: 20px !important; left: auto !important; }
+      html[dir="ltr"] .whatsapp-float, html:not([dir]) .whatsapp-float { left: 20px !important; right: auto !important; }
+      html[dir="rtl"] #mic-access-tool-general-button, html[dir="rtl"] .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="rtl"] ._access-icon { left: 20px !important; right: auto !important; }
+      html[dir="ltr"] #mic-access-tool-general-button, html[dir="ltr"] .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="ltr"] ._access-icon,
+      html:not([dir]) #mic-access-tool-general-button, html:not([dir]) .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool #mic-access-tool-general-button,
+      html:not([dir]) ._access-icon { right: 20px !important; left: auto !important; }
+      @media (max-width: 768px) { .whatsapp-float { display: flex !important; } }
+      @media (min-width: 769px) { .whatsapp-float { display: flex !important; } }
+      @media (max-width: 768px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+      @media (min-width: 769px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+    </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+  <nav class="navbar">
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+    <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+    <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display: none;">
+      <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+  </button>
+
+  <button class="phone-header-btn" data-phone="[business_phone]" aria-label="Call">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+    </svg>
+  </button>
+
+  <div class="nav-container">
+    <div class="nav-brand">
+      <a href="/" class="logo-link"><img class="logo" src="/assets/site-home-image-1.webp" alt="The Unfinished Healing"></a>
+    </div>
+
+    <ul class="nav-menu" id="navMenu"><li><a href="#services">Services</a></li><li><a href="#about">About</a></li><li><a href="#testimonials">Testimonials</a></li><li><a href="#stats">Stats</a></li></ul>
+
+    <div class="nav-cta-container">
+      <a href="#contact" class="nav-cta-btn">Contact</a>
+    </div>
+  </div>
+</nav>
+<script>
+
+// Navbar Mobile Menu Toggle and Contrast Fix
+(function() {
+  // Use 'load' event instead of 'DOMContentLoaded' to ensure we run AFTER all other scripts
+  window.addEventListener('load', function() {
+    
+    // FIX MOBILE BUTTON CONTRAST
+    // Detect navbar background color and apply contrasting color to mobile buttons
+    const navbar = document.querySelector('.navbar, nav, header');
+    if (!navbar) {
+      console.log('[Navbar] Navbar element not found');
+      return;
+    }
+    
+    // DECLARE VARIABLES EARLY to avoid Temporal Dead Zone errors
+    // These are used in multiple places below
+    let mobileToggle = document.getElementById('mobileToggle') ||
+                       document.querySelector('.mobile-toggle') ||
+                       document.querySelector('.hamburger') ||
+                       document.querySelector('.hamburger-menu') ||
+                       document.querySelector('.menu-toggle') ||
+                       document.querySelector('.burger-menu') ||
+                       document.querySelector('[aria-label="Menu"]') ||
+                       document.querySelector('[aria-label="תפריט"]');
+    
+    const phoneBtn = document.querySelector('.phone-header-btn');
+    
+    const computedStyle = window.getComputedStyle(navbar);
+    let bgColor = computedStyle.backgroundColor;
+    
+    console.log('[Navbar] Initial navbar background:', bgColor);
+    
+    // Check if background is transparent or rgba with 0 alpha
+    const isTransparent = bgColor === 'transparent' || 
+                         bgColor === 'rgba(0, 0, 0, 0)' ||
+                         (bgColor.startsWith('rgba') && bgColor.includes(', 0)'));
+    
+    if (isTransparent) {
+      // Check for background-image or gradient
+      const bgImage = computedStyle.backgroundImage;
+      if (bgImage && bgImage !== 'none') {
+        console.log('[Navbar] Navbar has background image/gradient, using dark text');
+        bgColor = 'rgb(240, 240, 240)'; // Assume light background
+      } else {
+        // Transparent navbar - check body background
+        const bodyBg = window.getComputedStyle(document.body).backgroundColor;
+        console.log('[Navbar] Navbar transparent, using body background:', bodyBg);
+        bgColor = bodyBg;
+      }
+    }
+    
+    // Calculate luminance to determine if background is light or dark
+    const rgb = bgColor.match(/\d+/g);
+    if (rgb && rgb.length >= 3) {
+      const r = parseInt(rgb[0]);
+      const g = parseInt(rgb[1]);
+      const b = parseInt(rgb[2]);
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      
+      // Mobile button colors are set by Claude's AI-generated CSS (same as .nav-menu a)
+      // No dynamic color overrides needed - colors come from the generated navbar CSS
+      console.log('[Navbar] Mobile button colors preserved from Claude CSS (luminance:', luminance.toFixed(2) + ')');
+      
+      // FIX ICON SIZES - Ensure SVGs are properly sized and visible
+      // INJECT CRITICAL CSS TO OVERRIDE ANY CONFLICTING RULES
+      const criticalCSS = document.createElement('style');
+      criticalCSS.id = 'zappy-mobile-nav-fix';
+      const htmlLang = document.documentElement.lang || 'en';
+      const htmlDir = document.documentElement.dir || 'ltr';
+      // Check both dir attribute AND lang for RTL detection
+      // dir="rtl" is the most reliable indicator
+      const isRTL = htmlDir === 'rtl' || htmlLang === 'he' || htmlLang === 'ar';
+      
+      criticalCSS.textContent = `
+        /* Hide mobile buttons on desktop, show only on mobile */
+        @media (min-width: 769px) {
+          .mobile-toggle,
+          .phone-header-btn {
+            display: none !important;
+          }
+        }
+        
+        /* Show and position mobile buttons correctly on mobile */
+        @media (max-width: 768px) {
+          .navbar,
+          nav.navbar {
+            min-height: 70px !important;
+          }
+
+          .mobile-toggle,
+          .phone-header-btn {
+            position: absolute !important;
+            top: 0 !important;
+            bottom: 0 !important;
+            margin-top: auto !important;
+            margin-bottom: auto !important;
+            transform: none !important;
+            z-index: 1001 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 36px !important;
+            height: 36px !important;
+            border-radius: 50% !important;
+            border: none !important;
+            cursor: pointer !important;
+            padding: 6px !important;
+            background: none !important;
+            color: var(--nav-text, var(--text-light)) !important;
+            touch-action: manipulation !important;
+            -webkit-tap-highlight-color: transparent !important;
+          }
+
+          html[data-zappy-site-type="ecommerce"] .phone-header-btn,
+          body[data-zappy-site-type="ecommerce"] .phone-header-btn,
+          html[data-zappy-site-type="ecommerce"] header .phone-header-btn,
+          html[data-zappy-site-type="ecommerce"] nav .phone-header-btn {
+            display: none !important;
+            visibility: hidden !important;
+            width: 0 !important;
+            height: 0 !important;
+            min-width: 0 !important;
+            overflow: hidden !important;
+          }
+          
+          /* LTR positioning (default): hamburger LEFT, phone RIGHT */
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .mobile-toggle,
+          html[dir="ltr"] .mobile-toggle {
+            left: 12px !important;
+            right: auto !important;
+          }
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .phone-header-btn,
+          html[dir="ltr"] .phone-header-btn {
+            right: 12px !important;
+            left: auto !important;
+          }
+          
+          /* RTL positioning: hamburger RIGHT, phone LEFT */
+          html[dir="rtl"] .mobile-toggle,
+          html[lang="he"] .mobile-toggle,
+          html[lang="ar"] .mobile-toggle {
+            right: 12px !important;
+            left: auto !important;
+          }
+          html[dir="rtl"] .phone-header-btn,
+          html[lang="he"] .phone-header-btn,
+          html[lang="ar"] .phone-header-btn {
+            left: 12px !important;
+            right: auto !important;
+          }
+          
+          /* CRITICAL: Ensure nav-container has min-height on mobile */
+          /* All children are positioned absolutely/fixed on mobile, so height:auto collapses to 0 */
+          .nav-container {
+            min-height: 70px !important;
+            position: relative !important;
+          }
+          
+          /* Ensure SVG icons are properly sized and inherit color */
+          .mobile-toggle svg,
+          .phone-header-btn svg {
+            width: 24px !important;
+            height: 24px !important;
+            /* Don't force display - let JavaScript control hamburger/close toggle */
+          }
+          
+          /* Reset nav-cta-container on mobile - remove desktop box-shadow/padding */
+          /* that creates a visible ghost box when CTA button is hidden */
+          .nav-cta-container {
+            box-shadow: none !important;
+            padding: 0 !important;
+          }
+          
+          /* Hide nav-cta-container entirely on mobile when there's no lang-switcher */
+          /* (only the CTA button is inside, and it's hidden on mobile) */
+          .nav-cta-container:not(:has(.lang-switcher)) {
+            display: none !important;
+          }
+          
+          /* CRITICAL: Prevent hero image fade gradient from bleeding over headline text */
+          /* The .image-fade-gradient has bottom: -30px (extends below parent) */
+          /* On mobile stacked layout, this overlaps the h1 text below the image */
+          .hero-image-column {
+            overflow: hidden !important;
+          }
+          .image-fade-gradient {
+            bottom: 0 !important;
+          }
+          
+          /* Hide desktop language switcher on mobile - hamburger menu handles it */
+          /* High specificity to override stored CSS */
+          .lang-switcher,
+          .nav-cta-container .lang-switcher,
+          .nav-container .lang-switcher,
+          .navbar .lang-switcher,
+          .navbar .nav-cta-container .lang-switcher {
+            display: none !important;
+          }
+        }
+      `;
+      
+      // Remove existing fix if present and inject new one
+      const existing = document.getElementById('zappy-mobile-nav-fix');
+      if (existing) existing.remove();
+      document.head.appendChild(criticalCSS);
+      
+      console.log('[Navbar] Critical CSS injected for mobile nav positioning');
+      
+      // ONLY apply inline positioning styles on mobile viewport
+      // On desktop, the CSS handles hiding these buttons with display: none
+      // Inline styles were breaking desktop layout by overriding CSS
+      const isMobileViewport = window.innerWidth <= 768;
+      
+      if (mobileToggle) {
+        // Icon sizing applies to all viewports for consistency
+        const hamburgerIcon = mobileToggle.querySelector('.hamburger-icon');
+        const closeIcon = mobileToggle.querySelector('.close-icon');
+        
+        if (hamburgerIcon) {
+          hamburgerIcon.style.setProperty('width', '24px', 'important');
+          hamburgerIcon.style.setProperty('height', '24px', 'important');
+          hamburgerIcon.style.setProperty('display', 'block', 'important'); // Show hamburger by default
+        }
+        if (closeIcon) {
+          closeIcon.style.setProperty('width', '24px', 'important');
+          closeIcon.style.setProperty('height', '24px', 'important');
+          closeIcon.style.setProperty('display', 'none', 'important'); // Hide close icon by default
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          mobileToggle.style.setProperty('position', 'absolute', 'important');
+          mobileToggle.style.setProperty('top', '0', 'important');
+          mobileToggle.style.setProperty('bottom', '0', 'important');
+          mobileToggle.style.setProperty('margin-top', 'auto', 'important');
+          mobileToggle.style.setProperty('margin-bottom', 'auto', 'important');
+          mobileToggle.style.setProperty('transform', 'none', 'important');
+          mobileToggle.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          
+          console.log('[Navbar] Mobile toggle positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          mobileToggle.style.removeProperty('position');
+          mobileToggle.style.removeProperty('top');
+          mobileToggle.style.removeProperty('transform');
+          mobileToggle.style.removeProperty('z-index');
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared mobile toggle inline positioning');
+        }
+      }
+      
+      if (phoneBtn) {
+        // Icon sizing applies to all viewports
+        const phoneIcon = phoneBtn.querySelector('svg');
+        if (phoneIcon) {
+          phoneIcon.style.width = '24px';
+          phoneIcon.style.height = '24px';
+          phoneIcon.setAttribute('width', '24');
+          phoneIcon.setAttribute('height', '24');
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          phoneBtn.style.setProperty('position', 'absolute', 'important');
+          phoneBtn.style.setProperty('top', '0', 'important');
+          phoneBtn.style.setProperty('bottom', '0', 'important');
+          phoneBtn.style.setProperty('margin-top', 'auto', 'important');
+          phoneBtn.style.setProperty('margin-bottom', 'auto', 'important');
+          phoneBtn.style.setProperty('transform', 'none', 'important');
+          phoneBtn.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          
+          console.log('[Navbar] Phone button positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          phoneBtn.style.removeProperty('position');
+          phoneBtn.style.removeProperty('top');
+          phoneBtn.style.removeProperty('transform');
+          phoneBtn.style.removeProperty('z-index');
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared phone button inline positioning');
+        }
+      }
+    } else {
+      console.log('[Navbar] Could not parse background color:', bgColor);
+    }
+    
+    // MOBILE MENU TOGGLE
+    // Re-query in case DOM changed (mobileToggle already declared at top of function)
+    mobileToggle = document.getElementById('mobileToggle') ||
+                   document.querySelector('.mobile-toggle') ||
+                   document.querySelector('.hamburger') ||
+                   document.querySelector('.hamburger-menu') ||
+                   document.querySelector('.menu-toggle') ||
+                   document.querySelector('.burger-menu') ||
+                   document.querySelector('[aria-label="Menu"]') ||
+                   document.querySelector('[aria-label="תפריט"]');
+    
+    // EXPANDED SEARCH: Find nav menu by ID or class
+    const navMenu = document.getElementById('navMenu') ||
+                  document.querySelector('.nav-menu') ||
+                  document.querySelector('.nav-links') ||
+                  document.querySelector('nav ul:not(.submenu)');
+    
+    if (!mobileToggle || !navMenu) {
+      console.log('[Navbar] Mobile toggle or menu not found:', { toggle: !!mobileToggle, menu: !!navMenu });
+      return;
+    }
+    
+    // Ensure navMenu has ID for CSS targeting
+    if (!navMenu.id) {
+      navMenu.id = 'navMenu';
+    }
+    
+    console.log('[Navbar] Initializing mobile menu...');
+    
+    // Remove any existing event listeners by cloning the button
+    const newToggle = mobileToggle.cloneNode(true);
+    mobileToggle.parentNode.replaceChild(newToggle, mobileToggle);
+    
+    // Toggle menu handler (shared by click and touchend)
+    function handleToggle(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const hamburgerIcon = newToggle.querySelector('.hamburger-icon');
+      const closeIcon = newToggle.querySelector('.close-icon');
+      const isActive = navMenu.classList.contains('active');
+      
+      if (isActive) {
+        // Close menu
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed');
+      } else {
+        // Open menu
+        navMenu.classList.add('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'none', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'block', 'important');
+        document.body.style.overflow = 'hidden';
+        console.log('[Navbar] Menu opened');
+      }
+    }
+    
+    // Use click for desktop/emulation and touchend as iOS Safari fallback.
+    // Prevent double-fire with a timestamp guard.
+    var lastToggleTime = 0;
+    function guardedToggle(e) {
+      var now = Date.now();
+      if (now - lastToggleTime < 300) return;
+      lastToggleTime = now;
+      handleToggle(e);
+    }
+    
+    newToggle.addEventListener('click', guardedToggle);
+    newToggle.addEventListener('touchend', guardedToggle);
+    
+    // Close menu when clicking nav links (but NOT dropdown toggles)
+    const navLinks = navMenu.querySelectorAll('a');
+    navLinks.forEach(function(link) {
+      link.addEventListener('click', function() {
+        // Don't close if it's a dropdown child (unless it's a real navigation link)
+        if (this.getAttribute('href') === '#') return;
+        
+        const hamburgerIcon = newToggle.querySelector('.hamburger-icon');
+        const closeIcon = newToggle.querySelector('.close-icon');
+        
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed (link clicked)');
+      });
+    });
+    
+    // DROPDOWN MENU TOGGLE (for mobile and touch devices)
+    var dropdownToggles = navMenu.querySelectorAll('.dropdown-toggle');
+    dropdownToggles.forEach(function(toggle) {
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var parent = this.closest('.nav-dropdown');
+        if (!parent) return;
+        
+        // Close other open dropdowns at the same level
+        var siblings = parent.parentNode.querySelectorAll('.nav-dropdown.open');
+        siblings.forEach(function(sib) {
+          if (sib !== parent) sib.classList.remove('open');
+        });
+        
+        parent.classList.toggle('open');
+        console.log('[Navbar] Dropdown toggled:', parent.classList.contains('open') ? 'open' : 'closed');
+      });
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.nav-dropdown')) {
+        var openDropdowns = document.querySelectorAll('.nav-dropdown.open');
+        openDropdowns.forEach(function(dd) { dd.classList.remove('open'); });
+      }
+    });
+    
+    console.log('[Navbar] Dropdown handlers initialized for ' + dropdownToggles.length + ' dropdowns');
+    
+    // Phone button functionality (phoneBtn already declared at top of function)
+    if (phoneBtn) {
+      phoneBtn.addEventListener('click', function() {
+        // Get phone number from placeholder in page or use default
+        const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+        const phoneNumber = phoneLinks.length > 0 
+          ? phoneLinks[0].getAttribute('href').replace('tel:', '')
+          : '[business_phone]';
+        
+        window.location.href = 'tel:' + phoneNumber;
+        console.log('[Navbar] Phone button clicked');
+      });
+    }
+    
+    console.log('[Navbar] Mobile menu initialized successfully');
+    
+    // WhatsApp button visibility is now controlled via CSS (siteSettings).
+    // No JS-based desktop hiding — the button is visible on both mobile and desktop by default.
+  });
+})();
+
+</script>
+  
+  <main id="main">
+    <section data-band-index="0" id="hero" class="home-hero-section" data-layout-spec="Home-hero" data-hero-type="fullscreen-scrim">
+  <!-- Background Image -->
+  <div class="home-hero-bg">
+    <img loading="eager" fetchpriority="high" data-hero-bg="true" data-placeholder="home-hero-image-1" data-context="Soulful landscape-portrait hybrid: soft dawn light breaking through botanical silhouettes — tall grasses, wildflowers, and fern fronds in delicate watercolor haze. Subtle map-like contour lines and topographic textures are integrated into the misty background layers. Warm amber and lilac tones blend into a dreamy, painterly scene evoking healing, stillness, and the quiet beauty of an ongoing journey. Wide panoramic composition suitable for a full-bleed hero background." width="1400" height="800" src="/assets/site-home-hero-image-1.webp" alt="Soft dawn landscape with botanical silhouettes and watercolor haze for The Unfinished Healing wellness brand">
+  </div>
+
+  <!-- Scrim Overlay -->
+  <div class="home-hero-scrim" aria-hidden="true"></div>
+
+  <!-- Decorative: Star Compass Flourish -->
+  <svg class="home-hero-deco home-hero-deco--compass" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" width="64" height="64">
+    <line x1="40" y1="4" x2="40" y2="76" stroke="#C9A84C" stroke-width="0.8" opacity="0.7"></line>
+    <line x1="4" y1="40" x2="76" y2="40" stroke="#C9A84C" stroke-width="0.8" opacity="0.7"></line>
+    <line x1="12" y1="12" x2="68" y2="68" stroke="#C9A84C" stroke-width="0.5" opacity="0.45"></line>
+    <line x1="68" y1="12" x2="12" y2="68" stroke="#C9A84C" stroke-width="0.5" opacity="0.45"></line>
+    <polygon points="40,4 43,36 40,44 37,36" fill="#C9A84C" opacity="0.7"></polygon>
+    <polygon points="40,76 43,44 40,36 37,44" fill="#C9A84C" opacity="0.5"></polygon>
+    <polygon points="4,40 36,37 44,40 36,43" fill="#C9A84C" opacity="0.7"></polygon>
+    <polygon points="76,40 44,37 36,40 44,43" fill="#C9A84C" opacity="0.5"></polygon>
+    <circle cx="40" cy="40" r="5" fill="none" stroke="#C9A84C" stroke-width="0.8" opacity="0.7"></circle>
+    <circle cx="40" cy="40" r="12" fill="none" stroke="#C9A84C" stroke-width="0.4" opacity="0.4"></circle>
+    <circle cx="40" cy="40" r="20" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.25"></circle>
+    <line x1="40" y1="28" x2="40" y2="24" stroke="#C9A84C" stroke-width="0.5" opacity="0.5"></line>
+    <line x1="40" y1="52" x2="40" y2="56" stroke="#C9A84C" stroke-width="0.5" opacity="0.5"></line>
+    <line x1="28" y1="40" x2="24" y2="40" stroke="#C9A84C" stroke-width="0.5" opacity="0.5"></line>
+    <line x1="52" y1="40" x2="56" y2="40" stroke="#C9A84C" stroke-width="0.5" opacity="0.5"></line>
+  </svg>
+
+  <!-- Decorative: Dotted Path Line -->
+  <svg class="home-hero-deco home-hero-deco--path" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 180 320" xmlns="http://www.w3.org/2000/svg" width="160" height="280">
+    <path d="M90,10 C110,60 70,100 95,150 C120,200 60,240 90,310" fill="none" stroke="#C9A84C" stroke-width="1.2" stroke-dasharray="4 8" opacity="0.5"></path>
+    <circle cx="90" cy="10" r="3.5" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.6"></circle>
+    <circle cx="95" cy="150" r="3.5" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.6"></circle>
+    <circle cx="90" cy="310" r="3.5" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.6"></circle>
+    <text x="102" y="14" font-family="'Montserrat', sans-serif" font-size="7" fill="#C9A84C" opacity="0.55" letter-spacing="0.08em">BEGIN</text>
+    <text x="103" y="154" font-family="'Montserrat', sans-serif" font-size="7" fill="#C9A84C" opacity="0.55" letter-spacing="0.08em">REST</text>
+    <text x="98" y="314" font-family="'Montserrat', sans-serif" font-size="7" fill="#C9A84C" opacity="0.55" letter-spacing="0.08em">CONTINUE</text>
+  </svg>
+
+  <!-- Noise Texture Overlay -->
+  <div class="home-hero-noise" aria-hidden="true"></div>
+
+  <!-- Main Content Overlay -->
+  <div class="home-hero-content">
+    <div class="home-hero-inner">
+
+      <span class="home-hero-eyebrow">The Unfinished Healing</span>
+
+      <h1 class="home-hero-h1">You Are Still<br><em>Becoming Well.</em></h1>
+
+      <div class="home-hero-divider-micro" aria-hidden="true"></div>
+
+      <h3 class="home-hero-subtitle">Healing isn't a destination you arrive at — it's the landscape you move through. Whether you're recovering from burnout, navigating grief, or simply seeking more wholeness in your daily life, this is a space for honest, ongoing, family health and wellness.</h3>
+
+      <div class="home-hero-ctas">
+        <a href="/contact" class="home-hero-btn home-hero-btn--primary">Begin the Journey</a>
+        <a href="/approach" class="home-hero-btn home-hero-btn--secondary">Our Approach</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bottom Divider: Topographic Mist Fade -->
+  <div class="home-hero-divider-wrapper" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1400 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="heroMistGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#F5EFE8" stop-opacity="0"></stop>
+          <stop offset="100%" stop-color="#F5EFE8" stop-opacity="1"></stop>
+        </linearGradient>
+      </defs>
+      <!-- Topographic contour lines -->
+      <path d="M0,80 Q175,65 350,72 T700,68 T1050,74 T1400,66 L1400,100 L0,100 Z" fill="#EBE2D8" opacity="0.4"></path>
+      <path d="M0,88 Q200,76 400,82 T800,78 T1200,84 T1400,78 L1400,100 L0,100 Z" fill="#EBE2D8" opacity="0.6"></path>
+      <path d="M0,93 Q250,85 500,90 T1000,87 T1400,91 L1400,100 L0,100 Z" fill="#EBE2D8" opacity="0.85"></path>
+      <rect x="0" y="0" width="1400" height="100" fill="url(#heroMistGrad)"></rect>
+      <!-- Subtle contour line accents -->
+      <path d="M0,72 Q175,58 350,65 T700,61 T1050,67 T1400,59" fill="#EBE2D8" stroke="#C9A84C" stroke-width="0.5" opacity="0.18"></path>
+      <path d="M0,82 Q200,70 400,76 T800,72 T1200,78 T1400,72" fill="#EBE2D8" stroke="#C9A84C" stroke-width="0.4" opacity="0.12"></path>
+    </svg>
+  </div>
+
+</section>
+
+<section data-band-index="1" id="services" class="home-services-section" data-layout-spec="Home-services">
+  <!-- Grain texture overlay -->
+  <div class="home-services-grain" aria-hidden="true"></div>
+
+  <!-- Faint contour-line motif SVG -->
+  <svg class="home-services-contour" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 520" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M-20,80 Q120,60 280,95 T560,75 Q720,55 900,88 T1220,65" stroke="rgba(91,67,106,0.12)" stroke-width="1" fill="none"></path>
+    <path d="M-20,140 Q150,120 320,155 T600,135 Q760,115 940,148 T1220,125" stroke="rgba(91,67,106,0.09)" stroke-width="1" fill="none"></path>
+    <path d="M-20,200 Q180,180 360,215 T640,195 Q800,175 980,208 T1220,185" stroke="rgba(91,67,106,0.07)" stroke-width="1" fill="none"></path>
+    <path d="M-20,260 Q200,240 400,275 T680,255 Q840,235 1020,268 T1220,245" stroke="rgba(215,199,242,0.18)" stroke-width="1" fill="none"></path>
+    <path d="M-20,320 Q220,300 440,335 T720,315 Q880,295 1060,328 T1220,305" stroke="rgba(215,199,242,0.13)" stroke-width="1" fill="none"></path>
+    <path d="M-20,380 Q240,360 480,395 T760,375 Q920,355 1100,388 T1220,365" stroke="rgba(216,155,166,0.12)" stroke-width="1" fill="none"></path>
+  </svg>
+
+  <!-- Lilac-to-rose wash behind grid -->
+  <div class="home-services-wash" aria-hidden="true"></div>
+
+  <div class="home-services-container">
+    <!-- Centered intro block -->
+    <div class="home-services-intro">
+      <span class="home-services-eyebrow">Ways We Walk Together</span>
+      <div class="home-services-divider-rule" aria-hidden="true"></div>
+      <h2 class="home-services-heading">Held in Every Stage<br>of Your Becoming</h2>
+      <p class="home-services-subtext">Healing is not a straight path — it curves, pauses, and deepens. The Unfinished Healing offers holistic wellness support designed to meet you exactly where you are, with warmth, honesty, and care for the whole of you.</p>
+    </div>
+
+    <!-- Three-card grid -->
+    <div class="home-services-grid">
+
+      <!-- Card 1: Holistic Healing Guidance -->
+      <article class="home-services-card">
+        <div class="home-services-card-accent" aria-hidden="true">
+          <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" width="80" height="80">
+            <circle cx="40" cy="40" r="28" stroke="rgba(201,168,76,0.28)" stroke-width="1"></circle>
+            <circle cx="40" cy="40" r="18" stroke="rgba(201,168,76,0.18)" stroke-width="1"></circle>
+            <line x1="40" y1="10" x2="40" y2="70" stroke="rgba(201,168,76,0.22)" stroke-width="1"></line>
+            <line x1="10" y1="40" x2="70" y2="40" stroke="rgba(201,168,76,0.22)" stroke-width="1"></line>
+            <line x1="20" y1="20" x2="60" y2="60" stroke="rgba(201,168,76,0.14)" stroke-width="1"></line>
+            <line x1="60" y1="20" x2="20" y2="60" stroke="rgba(201,168,76,0.14)" stroke-width="1"></line>
+            <circle cx="40" cy="40" r="4" fill="rgba(201,168,76,0.35)"></circle>
+          </svg>
+        </div>
+        <div class="home-services-card-icon" aria-hidden="true">
+          <svg data-element-type="icon" data-icon-type="svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+            <path d="M16 4 C16 4 8 10 8 18 C8 22.4 11.6 26 16 26 C20.4 26 24 22.4 24 18 C24 10 16 4 16 4Z" stroke="currentColor" stroke-width="1.2" fill="none"></path>
+            <path d="M16 12 L16 22 M12 17 L20 17" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
+          </svg>
+        </div>
+        <h3 class="home-services-card-title">Holistic Healing Guidance</h3>
+        <div class="home-services-card-rule" aria-hidden="true"></div>
+        <p class="home-services-card-body">True healing touches the whole of you — mind, body, and spirit. Through gentle, integrative guidance rooted in holistic wellness practices, we help you reconnect with your inner compass, understand the patterns that keep you stuck, and cultivate a sense of wholeness that doesn't depend on everything being "fixed."</p>
+        <a href="/contact" class="home-services-card-cta btn-ghost">Begin your journey <i class="fa-solid fa-arrow-right" style="font-size:0.7rem"></i></a>
+      </article>
+
+      <!-- Card 2: Burnout Recovery Support -->
+      <article class="home-services-card">
+        <div class="home-services-card-accent" aria-hidden="true">
+          <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" width="80" height="80">
+            <path d="M40,10 Q55,25 55,40 Q55,58 40,68 Q25,58 25,40 Q25,25 40,10Z" stroke="rgba(216,155,166,0.28)" stroke-width="1" fill="none"></path>
+            <path d="M40,18 Q50,30 50,40 Q50,54 40,62 Q30,54 30,40 Q30,30 40,18Z" stroke="rgba(216,155,166,0.18)" stroke-width="1" fill="none"></path>
+            <circle cx="40" cy="40" r="5" fill="rgba(216,155,166,0.3)"></circle>
+            <line x1="40" y1="10" x2="40" y2="18" stroke="rgba(201,168,76,0.3)" stroke-width="1"></line>
+            <line x1="40" y1="62" x2="40" y2="70" stroke="rgba(201,168,76,0.3)" stroke-width="1"></line>
+          </svg>
+        </div>
+        <div class="home-services-card-icon" aria-hidden="true">
+          <svg data-element-type="icon" data-icon-type="svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+            <path d="M8 20 Q10 14 16 12 Q22 14 24 20" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round"></path>
+            <path d="M12 26 Q14 22 16 20 Q18 22 20 26" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round"></path>
+            <circle cx="16" cy="9" r="2.5" stroke="currentColor" stroke-width="1.2" fill="none"></circle>
+          </svg>
+        </div>
+        <h3 class="home-services-card-title">Burnout Recovery Support</h3>
+        <div class="home-services-card-rule" aria-hidden="true"></div>
+        <p class="home-services-card-body">When exhaustion runs deeper than sleep can reach, something more intentional is needed. Our burnout recovery support meets you in the depletion without judgment — helping you identify what drained you, restore your energy reserves, and rebuild a life that actually sustains you, not one that merely survives.</p>
+        <a href="/contact" class="home-services-card-cta btn-ghost">Find your rest <i class="fa-solid fa-arrow-right" style="font-size:0.7rem"></i></a>
+      </article>
+
+      <!-- Card 3: Reflective Wellness Practices -->
+      <article class="home-services-card">
+        <div class="home-services-card-accent" aria-hidden="true">
+          <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" width="80" height="80">
+            <path d="M20,60 Q30,40 40,30 Q50,40 60,60" stroke="rgba(215,199,242,0.35)" stroke-width="1" fill="none"></path>
+            <path d="M25,60 Q35,44 40,36 Q45,44 55,60" stroke="rgba(215,199,242,0.22)" stroke-width="1" fill="none"></path>
+            <path d="M15,60 L65,60" stroke="rgba(201,168,76,0.25)" stroke-width="1"></path>
+            <circle cx="40" cy="28" r="4" stroke="rgba(215,199,242,0.4)" stroke-width="1" fill="none"></circle>
+            <circle cx="40" cy="28" r="1.5" fill="rgba(215,199,242,0.5)"></circle>
+          </svg>
+        </div>
+        <div class="home-services-card-icon" aria-hidden="true">
+          <svg data-element-type="icon" data-icon-type="svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+            <path d="M10 8 L10 24 M10 8 Q18 8 20 12 Q22 16 10 16" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+            <line x1="14" y1="24" x2="22" y2="24" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></line>
+          </svg>
+        </div>
+        <h3 class="home-services-card-title">Reflective Wellness Practices</h3>
+        <div class="home-services-card-rule" aria-hidden="true"></div>
+        <p class="home-services-card-body">Healing deepens when we learn to listen to ourselves. Through journaling frameworks, somatic awareness, and guided reflection, these mental health wellness practices create space for insight to arise naturally — turning daily life into a gentle, ongoing conversation with who you are becoming.</p>
+        <a href="/contact" class="home-services-card-cta btn-ghost">Explore practices <i class="fa-solid fa-arrow-right" style="font-size:0.7rem"></i></a>
+      </article>
+
+    </div>
+    <!-- End grid -->
+
+    <!-- Bottom CTA -->
+    <div class="home-services-bottom-cta">
+      <p class="home-services-bottom-text">Not sure where to begin? That's exactly where we start.</p>
+      <a href="/contact" class="btn-pill home-services-main-cta">Let's Talk</a>
+    </div>
+  </div>
+
+  <!-- Bottom torn-paper divider -->
+  <div class="home-services-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,90 L0,38 Q18,42 36,35 T72,40 Q90,34 108,38 T144,33 Q162,37 180,31 T216,36 Q234,30 252,34 T288,29 Q306,33 324,27 T360,32 Q378,28 396,32 T432,27 Q450,31 468,25 T504,30 Q522,26 540,30 T576,25 Q594,29 612,23 T648,28 Q666,24 684,28 T720,23 Q738,27 756,22 T792,27 Q810,23 828,27 T864,22 Q882,26 900,21 T936,26 Q954,22 972,26 T1008,21 Q1026,25 1044,20 T1080,25 Q1098,21 1116,25 T1152,20 Q1170,24 1188,19 L1200,22 L1200,90 Z" fill="#F5EFE8"></path>
+    </svg>
+  </div>
+</section>
+
+<section data-band-index="2" id="about" class="home-about-section" data-layout-spec="Home-about">
+  <!-- Noise texture overlay -->
+  <div class="home-about-noise" aria-hidden="true"></div>
+
+  <div class="home-about-container">
+    <!-- START: Content Column -->
+    <div class="home-about-content">
+
+      <!-- Micro-divider accent -->
+      <div class="home-about-rule" aria-hidden="true"></div>
+
+      <h2 class="home-about-heading">Healing Is Not a Destination.<br>It Is a Landscape You Keep Returning To.</h2>
+
+      <p class="home-about-body-primary">The Unfinished Healing was born from an honest truth: none of us arrive at wholeness fully formed. We circle back, we stumble, we soften, and we grow — not in straight lines, but in spirals. This brand exists to hold that reality with gentleness rather than judgment. Here, you will find a space designed for <em>family health and wellness</em> that honours where you are right now — not where you think you should be. Whether you are navigating grief, burnout, relational strain, or simply the quiet ache of feeling disconnected from yourself, you are welcome here exactly as you are.</p>
+
+      <p class="home-about-body-secondary">Healing is not about fixing what is broken. It is about learning to be present with what is, and finding sustainable ways to grow from that place with compassion and courage.</p>
+
+      <!-- Values: three stacked H3 mini-blocks -->
+      <div class="home-about-values">
+
+        <div class="home-about-value-item">
+          <div class="home-about-value-accent" aria-hidden="true"></div>
+          <div class="home-about-value-body">
+            <h3 class="home-about-value-heading">Honesty</h3>
+            <p class="home-about-value-desc">We speak truthfully about the messiness of healing — no false promises, no curated perfection. Only real, grounded presence.</p>
+          </div>
+        </div>
+
+        <div class="home-about-value-item">
+          <div class="home-about-value-accent" aria-hidden="true"></div>
+          <div class="home-about-value-body">
+            <h3 class="home-about-value-heading">Gentleness</h3>
+            <p class="home-about-value-desc">Compassion is the foundation of every interaction. We move at the pace of trust, not urgency.</p>
+          </div>
+        </div>
+
+        <div class="home-about-value-item">
+          <div class="home-about-value-accent" aria-hidden="true"></div>
+          <div class="home-about-value-body">
+            <h3 class="home-about-value-heading">Sustainable Transformation</h3>
+            <p class="home-about-value-desc">We believe in slow, lasting change — the kind rooted in self-awareness, regulated nervous systems, and compassionate growth over time.</p>
+          </div>
+        </div>
+
+      </div>
+      <!-- End Values -->
+
+    </div>
+    <!-- END: Content Column -->
+
+    <!-- END: Image Column -->
+    <div class="home-about-image-col">
+      <!-- Rose backplate peeking from bottom-right -->
+      <div class="home-about-backplate" aria-hidden="true"></div>
+
+      <!-- Decorative circular badge seal -->
+      <svg class="home-about-seal" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="45" cy="45" r="40" fill="none" stroke="rgba(138,122,155,0.55)" stroke-width="1"></circle>
+        <circle cx="45" cy="45" r="34" fill="none" stroke="rgba(138,122,155,0.35)" stroke-width="0.5"></circle>
+        <!-- Sun/horizon motif -->
+        <path d="M30,52 Q45,38 60,52" fill="none" stroke="rgba(201,168,76,0.6)" stroke-width="1.2"></path>
+        <circle cx="45" cy="45" r="5" fill="none" stroke="rgba(201,168,76,0.6)" stroke-width="1"></circle>
+        <line x1="45" y1="37" x2="45" y2="33" stroke="rgba(201,168,76,0.5)" stroke-width="1"></line>
+        <line x1="51" y1="39" x2="54" y2="36" stroke="rgba(201,168,76,0.4)" stroke-width="1"></line>
+        <line x1="39" y1="39" x2="36" y2="36" stroke="rgba(201,168,76,0.4)" stroke-width="1"></line>
+        <!-- Circular text path -->
+        <path id="sealCircle" d="M45,10 a35,35 0 1,1 -0.01,0" fill="none"></path>
+        <text font-size="6.5" fill="rgba(138,122,155,0.7)" font-family="Inter, sans-serif" letter-spacing="2.5">
+          <textPath href="#sealCircle">THE UNFINISHED HEALING · ONGOING · EVOLVING ·</textPath>
+        </text>
+      </svg>
+
+      <figure class="home-about-figure">
+        <img loading="lazy" decoding="async" data-placeholder="home-about-image-1" data-context="A soulful, intimate wellness portrait for The Unfinished Healing brand. Soft natural light falls on a pair of hands resting gently in a lap, holding a dried wildflower or small stone — evoking stillness, reflection, and the ongoing nature of healing. Warm sand and lilac tones, editorial photography style, shallow depth of field, slightly desaturated with a film-grain warmth. The mood is tender, introspective, and deeply human." width="520" height="680" src="/assets/site-home-about-image-1.webp" alt="Hands at rest holding a dried wildflower, symbolising the ongoing journey of healing">
+      </figure>
+    </div>
+    <!-- END: Image Column -->
+
+  </div>
+
+  <!-- Bottom divider: diagonal sweep from pale sand into muted rose and lilac -->
+  <div class="home-about-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="aboutDividerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#F2E8D8"></stop>
+          <stop offset="45%" stop-color="#D89BA6" stop-opacity="0.85"></stop>
+          <stop offset="100%" stop-color="#D7C7F2" stop-opacity="0.9"></stop>
+        </linearGradient>
+      </defs>
+      <!-- Filled bottom path -->
+      <path d="M0,100 L0,55 Q200,30 400,50 Q600,70 800,40 Q1000,15 1200,45 L1200,100 Z" fill="#2D1F35"></path>
+      <!-- Single curved guide line -->
+      <path d="M0,55 Q200,30 400,50 Q600,70 800,40 Q1000,15 1200,45" fill="#2D1F35" stroke="rgba(215,199,242,0.6)" stroke-width="1.5"></path>
+    </svg>
+  </div>
+
+</section>
+
+<section data-band-index="3" id="testimonials" class="home-testimonials-section" data-layout-spec="Home-testimonials">
+  <!-- Paper grain texture overlay -->
+  <div class="ht-grain-overlay" aria-hidden="true"></div>
+
+  <!-- Subtle contour lines decoration -->
+  <svg class="ht-contour-lines" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,120 Q200,100 400,130 T800,115 T1200,125" stroke="rgba(215,199,242,0.08)" stroke-width="1" fill="none"></path>
+    <path d="M0,200 Q300,185 600,210 T1200,195" stroke="rgba(215,199,242,0.06)" stroke-width="1" fill="none"></path>
+    <path d="M0,320 Q250,305 500,330 T1000,315 T1200,325" stroke="rgba(215,199,242,0.07)" stroke-width="1" fill="none"></path>
+    <path d="M0,440 Q350,425 700,450 T1200,435" stroke="rgba(215,199,242,0.05)" stroke-width="1" fill="none"></path>
+  </svg>
+
+  <!-- Lilac haze orbs -->
+  <div class="ht-haze ht-haze-left" aria-hidden="true"></div>
+  <div class="ht-haze ht-haze-right" aria-hidden="true"></div>
+
+  <div class="ht-container">
+
+    <!-- Intro block -->
+    <div class="ht-intro">
+      <span class="ht-label">Real Experiences</span>
+      <div class="ht-rule" aria-hidden="true"></div>
+      <h2 class="ht-heading">Words from Those Walking<br>Their Own Healing Path</h2>
+      <p class="ht-subtext">Healing looks different for everyone. Here are a few voices from those who found grounded support along the way — shared with honesty, not perfection.</p>
+    </div>
+
+    <!-- Asymmetrical testimonial layout -->
+    <div class="ht-panels">
+
+      <!-- Large card (START side) -->
+      <article class="ht-card ht-card-large">
+        <!-- Translucent paper backplate peeking from bottom-start edge -->
+        <div class="ht-backplate" aria-hidden="true"></div>
+
+        <!-- Opening quote mark -->
+        <div class="ht-quote-mark" aria-hidden="true">
+          <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 48 36" fill="none" xmlns="http://www.w3.org/2000/svg" width="48" height="36">
+            <path d="M0 36V22.5C0 10.5 7.5 3 22.5 0L24 3C16.5 5.5 12.5 10 12 16.5H21V36H0ZM27 36V22.5C27 10.5 34.5 3 49.5 0L51 3C43.5 5.5 39.5 10 39 16.5H48V36H27Z" fill="rgba(217,164,65,0.35)"></path>
+          </svg>
+        </div>
+
+        <blockquote class="ht-quote">
+          <p>I came in expecting to be fixed. What I found instead was a space where I didn't have to be anything other than where I was. The Unfinished Healing reminded me that my mental health wellness journey doesn't need a finish line — it just needs honesty and somewhere safe to breathe.</p>
+        </blockquote>
+
+        <footer class="ht-attribution">
+          <div class="ht-avatar" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="40" height="40">
+              <circle cx="20" cy="20" r="20" fill="rgba(215,199,242,0.15)"></circle>
+              <circle cx="20" cy="16" r="6" fill="rgba(215,199,242,0.4)"></circle>
+              <path d="M8 34c0-6.627 5.373-10 12-10s12 3.373 12 10" stroke="rgba(215,199,242,0.4)" stroke-width="1.5" fill="none"></path>
+            </svg>
+          </div>
+          <div class="ht-attr-text">
+            <span class="ht-name">Miriam</span>
+            <span class="ht-role">Wellness Seeker</span>
+          </div>
+        </footer>
+
+        <!-- Tiny star speckles -->
+        <div class="ht-speckles" aria-hidden="true">
+          <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" width="200" height="200">
+            <circle cx="30" cy="40" r="1" fill="rgba(217,164,65,0.4)"></circle>
+            <circle cx="160" cy="25" r="1.2" fill="rgba(215,199,242,0.35)"></circle>
+            <circle cx="80" cy="170" r="0.8" fill="rgba(217,164,65,0.3)"></circle>
+            <circle cx="140" cy="155" r="1" fill="rgba(215,199,242,0.3)"></circle>
+            <circle cx="185" cy="90" r="0.7" fill="rgba(217,164,65,0.25)"></circle>
+            <circle cx="15" cy="130" r="1.1" fill="rgba(215,199,242,0.2)"></circle>
+            <path d="M50 60 L51.2 57 L52.4 60 L55.4 60 L53 61.8 L53.9 64.8 L51.2 63 L48.5 64.8 L49.4 61.8 L47 60 Z" fill="rgba(217,164,65,0.2)"></path>
+          </svg>
+        </div>
+      </article>
+
+      <!-- Stacked smaller cards (END side) -->
+      <div class="ht-cards-stack">
+
+        <article class="ht-card ht-card-small">
+          <div class="ht-quote-mark ht-quote-mark-sm" aria-hidden="true">
+            <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 36 27" fill="none" xmlns="http://www.w3.org/2000/svg" width="32" height="24">
+              <path d="M0 27V16.875C0 7.875 5.625 2.25 16.875 0L18 2.25C12.375 4.125 9.375 7.5 9 12.375H15.75V27H0ZM20.25 27V16.875C20.25 7.875 25.875 2.25 37.125 0L38.25 2.25C32.625 4.125 29.625 7.5 29.25 12.375H36V27H20.25Z" fill="rgba(216,155,166,0.4)"></path>
+            </svg>
+          </div>
+
+          <blockquote class="ht-quote">
+            <p>As a therapist myself, I was skeptical about seeking support. But this felt different — thoughtful, unhurried, and genuinely human. It's rare to find something that holds space for the healer who also needs healing.</p>
+          </blockquote>
+
+          <footer class="ht-attribution">
+            <div class="ht-avatar" aria-hidden="true">
+              <svg data-element-type="icon" data-icon-type="svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="36" height="36">
+                <circle cx="20" cy="20" r="20" fill="rgba(216,155,166,0.15)"></circle>
+                <circle cx="20" cy="16" r="6" fill="rgba(216,155,166,0.4)"></circle>
+                <path d="M8 34c0-6.627 5.373-10 12-10s12 3.373 12 10" stroke="rgba(216,155,166,0.4)" stroke-width="1.5" fill="none"></path>
+              </svg>
+            </div>
+            <div class="ht-attr-text">
+              <span class="ht-name">Danielle</span>
+              <span class="ht-role">Therapist</span>
+            </div>
+          </footer>
+        </article>
+
+        <article class="ht-card ht-card-small">
+          <div class="ht-quote-mark ht-quote-mark-sm" aria-hidden="true">
+            <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 36 27" fill="none" xmlns="http://www.w3.org/2000/svg" width="32" height="24">
+              <path d="M0 27V16.875C0 7.875 5.625 2.25 16.875 0L18 2.25C12.375 4.125 9.375 7.5 9 12.375H15.75V27H0ZM20.25 27V16.875C20.25 7.875 25.875 2.25 37.125 0L38.25 2.25C32.625 4.125 29.625 7.5 29.25 12.375H36V27H20.25Z" fill="rgba(215,199,242,0.3)"></path>
+            </svg>
+          </div>
+
+          <blockquote class="ht-quote">
+            <p>I spent years performing recovery. Here, I finally stopped. The holistic wellness approach felt less like a program and more like a permission — to go slowly, to feel things, and to trust the process even when it's unfinished.</p>
+          </blockquote>
+
+          <footer class="ht-attribution">
+            <div class="ht-avatar" aria-hidden="true">
+              <svg data-element-type="icon" data-icon-type="svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="36" height="36">
+                <circle cx="20" cy="20" r="20" fill="rgba(215,199,242,0.12)"></circle>
+                <circle cx="20" cy="16" r="6" fill="rgba(215,199,242,0.35)"></circle>
+                <path d="M8 34c0-6.627 5.373-10 12-10s12 3.373 12 10" stroke="rgba(215,199,242,0.35)" stroke-width="1.5" fill="none"></path>
+              </svg>
+            </div>
+            <div class="ht-attr-text">
+              <span class="ht-name">Theo</span>
+              <span class="ht-role">Recovering Professional</span>
+            </div>
+          </footer>
+        </article>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom scalloped wave divider -->
+  <div class="ht-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,90 L0,45 Q30,28 60,45 Q90,62 120,45 Q150,28 180,45 Q210,62 240,45 Q270,28 300,45 Q330,62 360,45 Q390,28 420,45 Q450,62 480,45 Q510,28 540,45 Q570,62 600,45 Q630,28 660,45 Q690,62 720,45 Q750,28 780,45 Q810,62 840,45 Q870,28 900,45 Q930,62 960,45 Q990,28 1020,45 Q1050,62 1080,45 Q1110,28 1140,45 Q1170,62 1200,45 L1200,90 Z" fill="#F5EFE8"></path>
+      <!-- Tiny star speckles on divider -->
+      <circle cx="120" cy="70" r="1" fill="rgba(217,164,65,0.25)"></circle>
+      <circle cx="360" cy="75" r="0.8" fill="rgba(215,199,242,0.2)"></circle>
+      <circle cx="600" cy="68" r="1.1" fill="rgba(217,164,65,0.2)"></circle>
+      <circle cx="840" cy="72" r="0.9" fill="rgba(215,199,242,0.18)"></circle>
+      <circle cx="1080" cy="69" r="1" fill="rgba(217,164,65,0.22)"></circle>
+    </svg>
+  </div>
+</section>
+
+<section data-band-index="4" id="stats" class="home-stats-section" data-layout-spec="Home-stats">
+  <!-- Grain texture overlay -->
+  <div class="home-stats-grain" aria-hidden="true"></div>
+
+  <!-- Botanical silhouette -->
+  <div class="home-stats-botanical" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 320 480" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid meet">
+      <path d="M160,460 C160,460 155,380 140,340 C125,300 90,280 80,240 C70,200 90,170 100,150 C110,130 115,110 110,80" stroke="var(--text-dark)" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.07"></path>
+      <path d="M110,200 C110,200 80,195 60,180 C40,165 35,145 38,130" stroke="var(--text-dark)" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.07"></path>
+      <path d="M120,270 C120,270 95,260 75,240 C55,220 52,195 58,175" stroke="var(--text-dark)" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.07"></path>
+      <path d="M140,340 C140,340 165,320 180,295 C195,270 190,245 185,225" stroke="var(--text-dark)" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.07"></path>
+      <ellipse cx="95" cy="125" rx="28" ry="18" transform="rotate(-25 95 125)" stroke="var(--text-dark)" stroke-width="0.8" fill="none" opacity="0.06"></ellipse>
+      <ellipse cx="55" cy="165" rx="22" ry="14" transform="rotate(-40 55 165)" stroke="var(--text-dark)" stroke-width="0.8" fill="none" opacity="0.06"></ellipse>
+      <ellipse cx="62" cy="220" rx="25" ry="16" transform="rotate(-30 62 220)" stroke="var(--text-dark)" stroke-width="0.8" fill="none" opacity="0.06"></ellipse>
+      <ellipse cx="178" cy="268" rx="24" ry="15" transform="rotate(20 178 268)" stroke="var(--text-dark)" stroke-width="0.8" fill="none" opacity="0.06"></ellipse>
+      <path d="M100,150 C100,150 125,140 140,120 C155,100 152,78 148,60" stroke="var(--text-dark)" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.07"></path>
+      <ellipse cx="144" cy="58" rx="20" ry="13" transform="rotate(10 144 58)" stroke="var(--text-dark)" stroke-width="0.8" fill="none" opacity="0.06"></ellipse>
+    </svg>
+  </div>
+
+  <div class="home-stats-container">
+    <!-- Section header -->
+    <header class="home-stats-header">
+      <div class="home-stats-micro-rule" aria-hidden="true"></div>
+      <h2 class="home-stats-heading">What Grounds This Work</h2>
+      <p class="home-stats-subtext">A holistic wellness practice built on presence, honesty, and the belief that healing is never truly finished — only deepened.</p>
+    </header>
+
+    <!-- Four stat/trust blocks -->
+    <div class="home-stats-grid">
+
+      <article class="home-stats-card">
+        <div class="home-stats-card-inner">
+          <div class="home-stats-marker">Trauma-Aware</div>
+          <div class="home-stats-divider-line" aria-hidden="true"></div>
+          <h3 class="home-stats-card-title">Philosophy First</h3>
+          <p class="home-stats-card-text">Every session is shaped by a trauma-informed lens — meeting you where you are, without judgment, pressure, or a predetermined timeline for recovery.</p>
+        </div>
+      </article>
+
+      <article class="home-stats-card">
+        <div class="home-stats-card-inner">
+          <div class="home-stats-marker">Whole-Person</div>
+          <div class="home-stats-divider-line" aria-hidden="true"></div>
+          <h3 class="home-stats-card-title">Holistic Lens</h3>
+          <p class="home-stats-card-text">Mind, body, and spirit are not separate. This mental health wellness approach holds all of you — your history, your nervous system, your quiet longings — as equally valid.</p>
+        </div>
+      </article>
+
+      <article class="home-stats-card">
+        <div class="home-stats-card-inner">
+          <div class="home-stats-marker">Sustainable</div>
+          <div class="home-stats-divider-line" aria-hidden="true"></div>
+          <h3 class="home-stats-card-title">Support That Lasts</h3>
+          <p class="home-stats-card-text">Rather than quick fixes, the work here is rooted in practices you can carry forward — building resilience that holds even when life is hard and uneven.</p>
+        </div>
+      </article>
+
+      <article class="home-stats-card">
+        <div class="home-stats-card-inner">
+          <div class="home-stats-marker">Always Unfolding</div>
+          <div class="home-stats-divider-line" aria-hidden="true"></div>
+          <h3 class="home-stats-card-title">Room to Grow</h3>
+          <p class="home-stats-card-text">Healing isn't a destination you arrive at. This space holds room for setbacks, breakthroughs, questions, and the ongoing, evolving nature of family health and wellness.</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+
+  <!-- Bottom arc divider transitioning to contact section -->
+  <div class="home-stats-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="stats-arc-glow" cx="50%" cy="100%" r="60%" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#D9A441" stop-opacity="0.18"></stop>
+          <stop offset="60%" stop-color="#5B436A" stop-opacity="0.9"></stop>
+          <stop offset="100%" stop-color="#5B436A" stop-opacity="1"></stop>
+        </radialGradient>
+      </defs>
+      <path d="M0,100 L0,72 Q360,20 720,18 Q1080,16 1440,72 L1440,100 Z" fill="#EBE2D8"></path>
+      <path d="M0,100 L0,76 Q360,28 720,26 Q1080,24 1440,76 L1440,100 Z" fill="#EBE2D8"></path>
+    </svg>
+  </div>
+</section>
+
+<section data-band-index="5" id="contact" class="home-contact-section" data-layout-spec="Home-contact">
+  <!-- Paper grain texture overlay -->
+  <div class="home-contact-grain" aria-hidden="true"></div>
+
+  <!-- Rose-lilac wash behind form -->
+  <div class="home-contact-wash" aria-hidden="true"></div>
+
+  <div class="home-contact-container">
+    <!-- START: Contact Form Column -->
+    <div class="home-contact-form-col">
+      <div class="home-contact-form-card">
+        <p class="home-contact-form-eyebrow">Reach Out</p>
+        <form class="contact-form" action="#" method="POST" novalidate="">
+          <div class="home-contact-field">
+            <label for="contact-name">Your Name</label>
+            <input type="text" id="contact-name" name="name" placeholder="How shall I address you?" required="">
+          </div>
+          <div class="home-contact-field">
+            <label for="contact-email">Email Address</label>
+            <input type="email" id="contact-email" name="email" placeholder="your@email.com" required="">
+          </div>
+          <div class="home-contact-field">
+            <label for="contact-phone">Phone <span class="home-contact-optional">(optional)</span></label>
+            <input type="tel" id="contact-phone" name="phone" placeholder="+1 (000) 000-0000">
+          </div>
+          <div class="home-contact-field">
+            <label for="contact-message">Your Message</label>
+            <textarea id="contact-message" name="message" rows="5" placeholder="Share what brought you here — there are no wrong words." required=""></textarea>
+          </div>
+          <div class="privacy-consent">
+            <label class="privacy-consent-label">
+              <input type="checkbox" name="privacy_consent" class="privacy-consent-checkbox" required="">
+              <span>I have read and agree to the <a href="/terms" target="_blank">Terms &amp; Conditions</a> and <a href="/privacy" target="_blank">Privacy Policy</a></span>
+            </label>
+          </div>
+          <button type="submit" class="home-contact-submit btn-primary">Send My Message</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- END: Supportive Copy Column -->
+    <div class="home-contact-copy-col">
+      <!-- Decorative compass flourish -->
+      <svg class="home-contact-flourish" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+        <line x1="30" y1="2" x2="30" y2="58" stroke="#C9A84C" stroke-width="0.8" opacity="0.6"></line>
+        <line x1="2" y1="30" x2="58" y2="30" stroke="#C9A84C" stroke-width="0.8" opacity="0.6"></line>
+        <line x1="9" y1="9" x2="51" y2="51" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"></line>
+        <line x1="51" y1="9" x2="9" y2="51" stroke="#C9A84C" stroke-width="0.5" opacity="0.4"></line>
+        <polygon points="30,2 33,26 30,30 27,26" fill="#C9A84C" opacity="0.65"></polygon>
+        <polygon points="30,58 33,34 30,30 27,34" fill="#C9A84C" opacity="0.65"></polygon>
+        <polygon points="2,30 26,27 30,30 26,33" fill="#C9A84C" opacity="0.65"></polygon>
+        <polygon points="58,30 34,27 30,30 34,33" fill="#C9A84C" opacity="0.65"></polygon>
+        <circle cx="30" cy="30" r="4" fill="none" stroke="#C9A84C" stroke-width="0.8" opacity="0.6"></circle>
+        <circle cx="30" cy="30" r="10" fill="none" stroke="#C9A84C" stroke-width="0.4" opacity="0.3"></circle>
+        <circle cx="30" cy="30" r="18" fill="none" stroke="#C9A84C" stroke-width="0.3" opacity="0.2"></circle>
+      </svg>
+
+      <div class="home-contact-micro-rule" aria-hidden="true"></div>
+
+      <h2 class="home-contact-heading">You don't have to have it all figured out.</h2>
+
+      <p class="home-contact-intro">Whether you're ready to begin, still exploring, or simply curious about whether this space might be right for you — reaching out is enough. This is a place of holistic wellness and family health, where every inquiry is met with care.</p>
+
+      <ul class="home-contact-reassurance">
+        <li class="home-contact-reassurance-item">
+          <span class="home-contact-reassurance-icon" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </span>
+          <div class="home-contact-reassurance-text">
+            <strong>Gentle communication</strong>
+            <span>Every message is received with warmth, not clinical distance.</span>
+          </div>
+        </li>
+        <li class="home-contact-reassurance-item">
+          <span class="home-contact-reassurance-icon" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 3"></path></svg>
+          </span>
+          <div class="home-contact-reassurance-text">
+            <strong>No pressure, ever</strong>
+            <span>There's no obligation to commit — just an open conversation.</span>
+          </div>
+        </li>
+        <li class="home-contact-reassurance-item">
+          <span class="home-contact-reassurance-icon" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          </span>
+          <div class="home-contact-reassurance-text">
+            <strong>A thoughtful response</strong>
+            <span>I read every message personally and reply with care within 48 hours.</span>
+          </div>
+        </li>
+      </ul>
+
+      <div class="home-contact-direct">
+        <p class="home-contact-direct-label">Or reach me directly</p>
+        <div class="home-contact-direct-links">
+          <div class="home-contact-direct-item">
+            <i class="fa-regular fa-envelope" aria-hidden="true"></i>
+            
+          </div>
+          <div class="home-contact-direct-item">
+            <i class="fa-solid fa-phone" aria-hidden="true"></i>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom divider: rising gradient mist into closing CTA -->
+  <div class="home-contact-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="mistGradient" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#5B436A"></stop>
+          <stop offset="40%" stop-color="#7A5080"></stop>
+          <stop offset="70%" stop-color="#D89BA6" stop-opacity="0.85"></stop>
+          <stop offset="100%" stop-color="#5B436A"></stop>
+        </linearGradient>
+      </defs>
+      <path d="M0,90 L0,52 Q80,38 160,48 T320,42 Q420,36 500,46 T680,40 Q780,34 860,46 T1040,38 Q1120,44 1200,50 L1200,90 Z" fill="#1E1225"></path>
+      <path d="M0,90 L0,65 Q100,55 200,62 T400,56 Q520,50 640,60 T880,54 Q1000,48 1100,58 T1200,62 L1200,90 Z" fill="#1E1225" opacity="0.9"></path>
+    </svg>
+  </div>
+</section>
+
+<section data-band-index="6" id="cta" class="home-cta-section" data-layout-spec="Home-cta">
+  <!-- Paper grain texture overlay -->
+  <div class="home-cta-grain" aria-hidden="true"></div>
+
+  <!-- Dawn-to-dusk gradient bloom -->
+  <div class="home-cta-bloom" aria-hidden="true"></div>
+
+  <!-- Map path SVG line -->
+  <svg class="home-cta-mappath" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 600 320" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+    <path d="M60,300 C80,260 100,240 130,210 C160,180 180,170 220,150 C260,130 290,120 320,100 C350,80 370,65 400,50" stroke="#C9A84C" stroke-width="1" stroke-dasharray="4 6" stroke-linecap="round" fill="none" opacity="0.45"></path>
+    <!-- Waypoint dots -->
+    <circle cx="60" cy="300" r="3" fill="#C9A84C" opacity="0.5"></circle>
+    <circle cx="220" cy="150" r="2.5" fill="#C9A84C" opacity="0.4"></circle>
+    <circle cx="400" cy="50" r="3" fill="#C9A84C" opacity="0.55"></circle>
+    <!-- Small arrowhead at end -->
+    <path d="M395,44 L400,50 L406,44" stroke="#C9A84C" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.55"></path>
+  </svg>
+
+  <!-- Star compass flourish (top-right decoration) -->
+  <svg class="home-cta-compass" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="30" y1="2" x2="30" y2="58" stroke="#C9A84C" stroke-width="0.8" opacity="0.55"></line>
+    <line x1="2" y1="30" x2="58" y2="30" stroke="#C9A84C" stroke-width="0.8" opacity="0.55"></line>
+    <line x1="8" y1="8" x2="52" y2="52" stroke="#C9A84C" stroke-width="0.5" opacity="0.35"></line>
+    <line x1="52" y1="8" x2="8" y2="52" stroke="#C9A84C" stroke-width="0.5" opacity="0.35"></line>
+    <polygon points="30,4 32,28 30,26 28,28" fill="#C9A84C" opacity="0.6"></polygon>
+    <polygon points="30,56 32,32 30,34 28,32" fill="#C9A84C" opacity="0.6"></polygon>
+    <polygon points="4,30 28,32 26,30 28,28" fill="#C9A84C" opacity="0.6"></polygon>
+    <polygon points="56,30 32,32 34,30 32,28" fill="#C9A84C" opacity="0.6"></polygon>
+    <circle cx="30" cy="30" r="4" stroke="#C9A84C" stroke-width="0.8" fill="none" opacity="0.6"></circle>
+    <circle cx="30" cy="30" r="1.5" fill="#C9A84C" opacity="0.55"></circle>
+  </svg>
+
+  <!-- Main content -->
+  <div class="home-cta-container">
+    <!-- Micro divider -->
+    <div class="home-cta-micro-divider" aria-hidden="true"></div>
+
+    <div class="home-cta-content">
+      <p class="home-cta-eyebrow">A gentle invitation</p>
+      <h2 class="home-cta-heading">You don’t have to be
+        <em>finished</em> to begin.</h2>
+      <p class="home-cta-body">Healing doesn’t ask you to arrive whole. It only asks that you take one tender step forward. Wherever you are on your path — uncertain, mid-journey, or quietly searching — there is space here for you. Reach out, and let’s walk the next part together.</p>
+
+      <!-- Amber accent line around CTA -->
+      <div class="home-cta-btn-wrapper">
+        <a href="/contact" class="home-cta-btn btn-pill">Begin the Conversation</a>
+      </div>
+
+      <!-- Micro divider bottom -->
+      <div class="home-cta-micro-divider home-cta-micro-divider--bottom" aria-hidden="true"></div>
+
+      <p class="home-cta-footnote">Family health and wellness support — wherever your journey begins.</p>
+    </div>
+  </div>
+</section>
+  </main>
+  
+  <footer class="site-footer" aria-label="Site footer"><div class="footer-top"><div class="footer-container"><div class="footer-grid"><div class="footer-col footer-col--brand"><img src="/assets/the-unfinished-healing-wellness-logo.webp" alt="The Unfinished Healing" class="logo"><p class="footer-tagline">Healing is not a destination — it is a landscape you continue to move through. We walk alongside you, every step of the way.</p><div class="footer-social"></div></div><div class="footer-col footer-col--links"><h3 class="footer-heading">Quick Links</h3><ul class="footer-nav"><li><a href="#services">Services</a></li><li><a href="#about">About</a></li><li><a href="#testimonials">Testimonials</a></li><li><a href="#stats">Stats</a></li></ul></div><div class="footer-col footer-col--contact"><h3 class="footer-heading">Contact</h3><ul class="footer-contact"><li><span class="contact-icon"><i class="fas fa-envelope"></i></span><span class="contact-text"><a href="mailto:[business_email]">[business_email]</a></span></li><li><span class="contact-icon"><i class="fas fa-phone"></i></span><span class="contact-text"><a href="tel:[business_phone]">[business_phone]</a></span></li><li><a href="/"><span class="contact-icon"><i class="fas fa-map-marker-alt"></i></span><span class="contact-text">[business_address]</span></a></li></ul></div><div class="footer-col footer-col--hours"><h3 class="footer-heading">Hours</h3><ul class="footer-hours"><li><a href="/"><span class="hours-day">Mon – Fri</span><span class="hours-time">9:00 am – 6:00 pm</span></a></li><li><a href="/"><span class="hours-day">Saturday</span><span class="hours-time">10:00 am – 4:00 pm</span></a></li><li><a href="/"><span class="hours-day">Sunday</span><span class="hours-time">Closed</span></a></li></ul><p class="footer-badge"><i class="fas fa-leaf"></i> Compassionate care, always</p></div></div></div></div><div class="footer-bottom"><div class="footer-container"><div class="footer-bottom-inner"><p class="footer-copyright">© 2026 The Unfinished Healing. All rights reserved.</p><div class="footer-legal"><a href="/privacy">Privacy Policy</a><a href="/terms">Terms &amp; Conditions</a><a href="/accessibility">Accessibility</a><a href="https://zappy5.com" target="_blank" class="zappy-attribution">Generated by Zappy</a></div></div></div></div></footer>
+  
+  <a href="https://wa.me/[whatsapp_handle]" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+  
+  <div data-integration="accessibility:toolbar"></div>
+
+    <script src="/script.js"></script>
+
+    <script id="zappy-mobile-submenu-script">
+    (function() {
+      function initMobileSubmenuToggles() {
+        if (window.innerWidth > 768) {
+          document.querySelectorAll('.mobile-submenu-toggle').forEach(function(btn) { btn.remove(); });
+          document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) { menu.classList.remove('mobile-expanded'); });
+          return;
+        }
+        var items = document.querySelectorAll('.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)');
+        items.forEach(function(li) {
+          if (li.querySelector('.mobile-submenu-toggle')) return;
+          var submenu = li.querySelector('.sub-menu');
+          var parentLink = li.querySelector(':scope > a');
+          if (!submenu || !parentLink) return;
+          var toggleBtn = document.createElement('button');
+          toggleBtn.className = 'mobile-submenu-toggle';
+          toggleBtn.setAttribute('aria-label', 'Toggle submenu');
+          toggleBtn.setAttribute('type', 'button');
+          parentLink.insertAdjacentElement('afterend', toggleBtn);
+          toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+              if (menu !== submenu) { menu.classList.remove('mobile-expanded'); var t = menu.parentElement.querySelector('.mobile-submenu-toggle'); if(t) t.classList.remove('expanded'); }
+            });
+            submenu.classList.toggle('mobile-expanded');
+            toggleBtn.classList.toggle('expanded');
+          });
+        });
+      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileSubmenuToggles); }
+      else { initMobileSubmenuToggles(); }
+      var resizeTimer; window.addEventListener('resize', function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(initMobileSubmenuToggles, 250); });
+      // Re-initialize when mobile menu becomes visible (MutationObserver)
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes') {
+            var target = mutation.target;
+            if (target.classList && (target.classList.contains('active') || target.classList.contains('open'))) {
+              setTimeout(initMobileSubmenuToggles, 100);
+            }
+          }
+        });
+      });
+      setTimeout(function() {
+        document.querySelectorAll('.mobile-menu, .nav-menu, #navMenu, nav').forEach(function(menu) {
+          observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
+        });
+      }, 500);
+    })();
+    </script>
+
+    <script id="zappy-navbar-scroll-effect">
+    (function(){
+      var nb=document.querySelector('nav.navbar,.navbar:not(.zappy-catalog-menu)');
+      var cm=document.querySelector('.zappy-catalog-menu,#zappy-catalog-menu');
+      if(!nb)return;
+      var fb='rgba(242,232,216,0.85)';
+      var th=60;
+      var rs=getComputedStyle(document.documentElement);
+      var td=rs.getPropertyValue('--text-dark').trim()||'#1a1a1a';
+      var tl=rs.getPropertyValue('--text-light').trim()||'#ffffff';
+      var st=true?td:tl;
+      nb.style.transition='background 0.3s ease,backdrop-filter 0.3s ease,-webkit-backdrop-filter 0.3s ease,box-shadow 0.3s ease';
+      if(cm)cm.style.transition='background 0.3s ease,backdrop-filter 0.3s ease,-webkit-backdrop-filter 0.3s ease';
+      var neSel='a,.navbar-brand,.navbar-brand a,.dropdown-toggle,.mobile-toggle,.phone-header-btn,.mobile-hamburger-btn,.mobile-close-btn,.mobile-submenu-toggle,.nav-link';
+      var skipCls=['cart-link','login-link','nav-search-toggle','search-toggle'];
+      function sTC(c,clr){var els=c.querySelectorAll(neSel);for(var i=0;i<els.length;i++){var sk=false;if(els[i].closest('.sub-menu')||els[i].closest('.dropdown-menu')){sk=true;}for(var j=0;j<skipCls.length;j++){if(els[i].classList.contains(skipCls[j])){sk=true;break;}}if(!sk)els[i].style.setProperty('color',clr,'important');}}
+      function cTC(c){var els=c.querySelectorAll(neSel);for(var i=0;i<els.length;i++){if(els[i].closest('.sub-menu')||els[i].closest('.dropdown-menu'))continue;els[i].style.removeProperty('color');}}
+      function applyScrolled(){
+        nb.classList.add('scrolled');
+        if(window.innerWidth>768){
+          nb.style.setProperty('--frosted-text',st);
+          nb.style.setProperty('background-image','none','important');
+          nb.style.setProperty('background-color',fb,'important');
+          nb.style.backdropFilter='blur(12px)';nb.style.webkitBackdropFilter='blur(12px)';nb.style.boxShadow='0 2px 16px rgba(0,0,0,0.12)';
+          sTC(nb,st);
+        }
+        if(cm){cm.classList.add('scrolled');if(window.innerWidth>768){cm.style.setProperty('background',fb,'important');cm.style.setProperty('backdrop-filter','blur(12px)','important');cm.style.setProperty('-webkit-backdrop-filter','blur(12px)','important');sTC(cm,st);}}
+      }
+      function onS(){
+        if(window._zappyNavNoDarkHero) return;
+        if(window.innerWidth<=768){nb.classList.remove('scrolled');cTC(nb);if(cm){cm.classList.remove('scrolled');cTC(cm);}return;}
+        var y=window.scrollY||window.pageYOffset;
+        if(y>th){
+          nb.classList.add('scrolled');nb.style.setProperty('background-color',fb,'important');nb.style.setProperty('background-image','none','important');
+          nb.style.setProperty('--frosted-text',st);nb.style.backdropFilter='blur(12px)';nb.style.webkitBackdropFilter='blur(12px)';nb.style.boxShadow='0 2px 16px rgba(0,0,0,0.12)';
+          sTC(nb,st);
+          if(cm){cm.classList.add('scrolled');cm.style.setProperty('background',fb,'important');cm.style.setProperty('backdrop-filter','blur(12px)','important');cm.style.setProperty('-webkit-backdrop-filter','blur(12px)','important');sTC(cm,st);}
+        }else{
+          nb.classList.remove('scrolled');nb.style.setProperty('background-color','transparent','important');nb.style.removeProperty('background-image');
+          nb.style.removeProperty('--frosted-text');nb.style.backdropFilter='none';nb.style.webkitBackdropFilter='none';nb.style.boxShadow='none';
+          cTC(nb);
+          if(cm){cm.classList.remove('scrolled');cm.style.setProperty('background','transparent','important');cm.style.setProperty('backdrop-filter','none','important');cm.style.setProperty('-webkit-backdrop-filter','none','important');cTC(cm);}
+        }
+      }
+      function sLum(rv,gv,bv){rv/=255;gv/=255;bv/=255;rv=rv<=0.03928?rv/12.92:Math.pow((rv+0.055)/1.055,2.4);gv=gv<=0.03928?gv/12.92:Math.pow((gv+0.055)/1.055,2.4);bv=bv<=0.03928?bv/12.92:Math.pow((bv+0.055)/1.055,2.4);return 0.2126*rv+0.7152*gv+0.0722*bv;}
+      window.addEventListener('scroll',onS,{passive:true});
+      window.addEventListener('resize',onS,{passive:true});
+      onS();
+      var heroEl=document.querySelector('section[class*="hero"],[data-hero-type],main:not(.courses-page-main)>section:first-child');
+      var hasDH=false;
+      if(heroEl){var hCs=getComputedStyle(heroEl);var hBI=hCs.backgroundImage;if(hBI&&hBI!=='none'){if(hBI.indexOf('url(')!==-1){var hM2=hCs.backgroundColor.match(/\d+/g);if(hM2&&hM2.length>=3){hasDH=sLum(parseInt(hM2[0]),parseInt(hM2[1]),parseInt(hM2[2]))<0.4;}else{hasDH=true;}}else if(hBI.indexOf('gradient')!==-1){var cM=hBI.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/g);if(cM&&cM.length>0){var tLm=0;for(var ci=0;ci<cM.length;ci++){var pts=cM[ci].match(/\d+/g);tLm+=sLum(parseInt(pts[0]),parseInt(pts[1]),parseInt(pts[2]));}hasDH=(tLm/cM.length)<0.4;}else{hasDH=true;}}else{hasDH=true;}}else{var hM=hCs.backgroundColor.match(/\d+/g);if(hM&&hM.length>=3){hasDH=sLum(parseInt(hM[0]),parseInt(hM[1]),parseInt(hM[2]))<0.4;}}}
+      if(!hasDH){window.removeEventListener('scroll',onS);window.removeEventListener('resize',onS);applyScrolled();window._zappyNavNoDarkHero=true;}
+    })();
+    </script>
+</body>
+</html>
